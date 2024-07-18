@@ -1,0 +1,23 @@
+h1{
+    color: rgb(245, 130, 130);
+    text-align: center;
+    padding: 15px;
+}
+nav{
+    background-color: blue;
+    width: 100%;
+    height: 70px;
+}
+.contenedorProductos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contenedorProductos div {
+    border: 1px solid blue;
+    height: 170px;
+    width: 200px;
+    text-align: center;
+    margin-top: 20px;
+}
