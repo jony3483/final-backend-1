@@ -4,6 +4,7 @@ const router = express.Router();
 
 import CartManager from "../dao/db/cart-manager-db.js";
 const cartManager = new CartManager();
+import CartModel from "../dao/models/cart.model.js";
 
 
 //1) creamos nuevo carrito:
@@ -22,8 +23,14 @@ router.post("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
     const cartId = req.params.cid;
     try {
-        const carrito = await cartManager.getCarritoById(cartId);
-        res.json(carrito.products);
+        const carrito = await CartModel.findById(cartId);
+
+        if (!carrito) {
+            console.log("No existe ese carrito con el id");
+            return res.status(404).json({ error: "Carrito no encontrado" });
+        }
+
+       return res.json(carrito.products);
     } catch (error) {
         console.error("Error al obtener el carrito", error);
         res.status(500).json({ error: "Error interno del servidor" });

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 //creamos el schema y el model de productos:
 
@@ -40,6 +41,7 @@ const productoSchema = new mongoose.Schema({
     }
 })
 
+productoSchema.plugin(mongoosePaginate);
 //aca creamos el model y lo exportamos:
 
 const ProductModel = mongoose.model("products", productoSchema);

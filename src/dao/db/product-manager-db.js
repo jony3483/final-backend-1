@@ -1,5 +1,5 @@
 //importamos el productoModel:
-import ProductModel from "../fs/data/product.model.js";
+import ProductModel from "../models/product.model.js";
 
 class ProductManager {
   async addProduct({
@@ -46,50 +46,86 @@ class ProductManager {
     }
   }
 
-  async getProducts() {
+  async getProducts({ limit = 10, page = 1, sort, query} = {}) {
     try {
-      const arrayProductos = await ProductModel.find();
-      return arrayProductos;
+      const skip = (page - 1) * limit;
+      let queryOptions = {}; 
+      
+      if (query) {
+            queryOptions = { category: query}; 
+      }
+
+      const sortOptions = {};
+          if (sort) {
+              if (sort === 'asc' || sort === 'desc') {
+                    sortOptions.price = sort === 'asc' ? 1 : -1;
+              }
+          }
+      
+          const productos = await ProductModel
+          .find(queryOptions)
+          .sort(sortOptions)
+          .skip(skip)
+          .limit(limit);
+
+      const totalProducts = await ProductModel.countDocuments(queryOptions);
+
+      const totalPages = Math.ceil(totalProducts / limit);
+      const hasPrevPage = page > 1;
+      const hasNextPage = page < totalPages;
+
+      
+      return {
+        docs: productos,
+        totalPages,
+        prevPage: hasPrevPage ? page - 1 : null,
+        nextPage: hasNextPage ? page + 1 : null,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+        nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
+    };
+
     } catch (error) {
-      console.log("Error al botener los productos", error);
-      throw error;
-    }
-  }
+    console.log("Error al obtener los productos", error);
+    throw error;
+}
+}
+
+
 
   async getProductById(id) {
     try {
-      const buscado = await ProductModel.findById(id);
+      const producto = await ProductModel.findById(id);
 
-      if (!buscado) {
+      if (!producto) {
         console.log("Producto no encontrado");
         return null;
       } else {
         console.log("Producto encontrado");
-        return buscado;
+        return producto;
       }
     } catch (error) {
       console.log("Error al buscar producto por id", error);
-      throw error;
     }
   }
 
+
+
   async updateProduct(id, productoActualizado) {
     try {
-      const producto = await ProductModel.findByIdAndUpdate(
-        id,
-        productoActualizado
-      );
+      const updateado = await ProductModel.findByIdAndUpdate(id, productoActualizado);
 
-      if (!producto) {
+      if (!updateado) {
         console.log("no se encuentra producto a actualizar");
         return null;
       } else {
         console.log("producto actualizado con exito");
-        return producto;
+        return updateado;
       }
     } catch (error) {
       console.log("Error al actualizar el producto", error);
-      throw error;
     }
   }
 

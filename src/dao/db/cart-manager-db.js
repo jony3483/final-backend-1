@@ -1,4 +1,4 @@
-import CartModel from "../fs/data/cart.model.js";
+import CartModel from "../models/cart.model.js";
 
 class CartManager {
   async crearCarrito() {
@@ -17,21 +17,22 @@ class CartManager {
       const carrito = await CartModel.findById(cartId);
 
       if (!carrito) {
-        throw new Error(`No existe un carrito con el id ${cartId}`);
+        console.log("No existe un carrito con el id ");
+        return null;
       }
+
       return carrito;
     } catch (error) {
       console.error("Error al obtener el carrito por ID", error);
-      throw error;
+
     }
   }
+
 
   async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
     try {
       const carrito = await this.getCarritoById(cartId);
-      const existeProducto = carrito.products.find(
-        (item) => item.product.toString() === productId
-      );
+      const existeProducto = carrito.products.find(item => item.product.toString() === productId);
 
       if (existeProducto) {
         existeProducto.quantity += quantity;
