@@ -10,7 +10,7 @@ const cartManager = new CartManager();
 
 router.get("/products", async (req, res) => {
   try {
-    const { page = 1, limit = 2 } = req.query;
+    const { page = 1, limit = 4 } = req.query;
     const productos = await productManager.getProducts({
        page: parseInt(page),
        limit: parseInt(limit)
