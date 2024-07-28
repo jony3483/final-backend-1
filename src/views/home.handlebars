@@ -1,16 +1,17 @@
-<nav>
-    <h1>listado de todos los productos</h1>
-</nav>
-
-<div class="contenedorProductos">
-    {{#each productos}}
-    <div>
-        <p> titulo: {{this.title}}</p>
-        <p> descripcion: {{this.description}}</p>
-        <P> categoria: {{this.category}}</P>
-        <p> precio: {{this.price}}</p>
-    </div>
-    {{/each}}
-</div>
-
-
+<html>
+  <head>
+    <title>Lista de Productos</title>
+  </head>
+  <body>
+    <h1>Lista de Productos</h1>
+    {{#if products.length}}
+      <ul>
+        {{#each products}}
+          <li>{{this.name}} - ${{this.price}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p>No hay productos agregados.</p>
+    {{/if}}
+  </body>
+</html>

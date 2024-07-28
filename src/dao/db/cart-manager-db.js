@@ -1,4 +1,4 @@
-import CartModel from "../models/cart.model.js";
+import CartModel from "../fs/data/cart.model.js";
 
 class CartManager {
   async crearCarrito() {
@@ -7,7 +7,7 @@ class CartManager {
       await nuevoCarrito.save();
       return nuevoCarrito;
     } catch (error) {
-      console.log("error al crear carrito", error);
+      console.log("Error al crear carrito", error);
       throw error;
     }
   }
@@ -17,17 +17,15 @@ class CartManager {
       const carrito = await CartModel.findById(cartId);
 
       if (!carrito) {
-        console.log("No existe un carrito con el id ");
+        console.log("No existe un carrito con el id");
         return null;
       }
 
       return carrito;
     } catch (error) {
       console.error("Error al obtener el carrito por ID", error);
-
     }
   }
-
 
   async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
     try {
@@ -40,12 +38,12 @@ class CartManager {
         carrito.products.push({ product: productId, quantity });
       }
 
-      // vamso a marcar la propiedad "products" como modificada antes de guaradar:
+      //Vamos a marcar la propiedad "products" como modificada antes de guardar:
       carrito.markModified("products");
       await carrito.save();
       return carrito;
     } catch (error) {
-      console.error("error al agregar producto al carrito", error);
+      console.error("Error al agregar producto al carrito", error);
       throw error;
     }
   }

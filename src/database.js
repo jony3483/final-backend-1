@@ -2,7 +2,7 @@
 
 //1) importamos el modulo;
 
-import mongoose from "mongoose";
+import mongoose, { connect} from "mongoose";
 
 //2) usamos el metodo connect para vincular la bd:
 

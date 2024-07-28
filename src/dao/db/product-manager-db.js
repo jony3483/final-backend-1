@@ -1,5 +1,5 @@
-//importamos el productoModel:
-import ProductModel from "../models/product.model.js";
+//Importamos el ProductModel:
+import ProductModel from "../fs/data/product.model.js";
 
 class ProductManager {
   async addProduct({
@@ -18,12 +18,12 @@ class ProductManager {
         return;
       }
 
-      //aca tenemos que cambiar la validacion
+      //Aca tenemos que cambiar la validacion:
 
       const existeProducto = await ProductModel.findOne({ code: code });
 
       if (existeProducto) {
-        console.log("el codigo debe ser unico");
+        console.log("El codigo debe ser unico");
         return;
       }
 
@@ -45,7 +45,6 @@ class ProductManager {
       throw error;
     }
   }
-
   async getProducts({ limit = 10, page = 1, sort, query} = {}) {
     try {
       const skip = (page - 1) * limit;
@@ -68,30 +67,29 @@ class ProductManager {
           .skip(skip)
           .limit(limit);
 
-      const totalProducts = await ProductModel.countDocuments(queryOptions);
+          const totalProducts = await ProductModel.countDocuments(queryOptions);
 
-      const totalPages = Math.ceil(totalProducts / limit);
-      const hasPrevPage = page > 1;
-      const hasNextPage = page < totalPages;
+          const totalPages = Math.ceil(totalProducts / limit);
+          const hasPrevPage = page > 1;
+          const hasNextPage = page < totalPages;
 
-      
-      return {
-        docs: productos,
-        totalPages,
-        prevPage: hasPrevPage ? page - 1 : null,
-        nextPage: hasNextPage ? page + 1 : null,
-        page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
-        nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
-    };
+          return {
+            docs: productos,
+            totalPages,
+            prevPage: hasPrevPage ? page - 1 : null,
+            nextPage: hasNextPage ? page + 1 : null,
+            page,
+            hasPrevPage,
+            hasNextPage,
+            prevLink: hasPrevPage ? `/api/products?limit=${limit}&page=${page - 1}&sort=${sort}&query=${query}` : null,
+            nextLink: hasNextPage ? `/api/products?limit=${limit}&page=${page + 1}&sort=${sort}&query=${query}` : null,
+        };
 
     } catch (error) {
-    console.log("Error al obtener los productos", error);
-    throw error;
-}
-}
+      console.log("Error al obtener los productos", error);
+      throw error;
+    }
+  }
 
 
 
@@ -108,24 +106,25 @@ class ProductManager {
       }
     } catch (error) {
       console.log("Error al buscar producto por id", error);
+      throw error;
     }
   }
 
 
-
   async updateProduct(id, productoActualizado) {
     try {
-      const updateado = await ProductModel.findByIdAndUpdate(id, productoActualizado);
+      const updateado = await ProductModel.findByIdAndUpdate(id,productoActualizado);
 
       if (!updateado) {
-        console.log("no se encuentra producto a actualizar");
+        console.log("No se encuentra el producto que queres actualizar");
         return null;
       } else {
-        console.log("producto actualizado con exito");
+        console.log("Producto actualizado con exito");
         return updateado;
       }
     } catch (error) {
       console.log("Error al actualizar el producto", error);
+      throw error;
     }
   }
 
@@ -133,10 +132,10 @@ class ProductManager {
     try {
       const borrado = await ProductModel.findByIdAndDelete(id);
       if (!borrado) {
-        console.log("no lo encuentro, pasame bien el dato");
+        console.log("No lo encuentro, pasame bien el dato");
         return null;
       } else {
-        console.log("producto eliminado");
+        console.log("Producto eliminado !");
         return borrado;
       }
     } catch (error) {
